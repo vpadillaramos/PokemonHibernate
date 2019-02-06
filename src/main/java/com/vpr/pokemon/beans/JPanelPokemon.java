@@ -1,13 +1,10 @@
 package com.vpr.pokemon.beans;
 
 import javax.swing.JPanel;
-import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
-import javax.swing.JScrollPane;
-import javax.swing.JList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
@@ -27,7 +24,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 import com.vpr.pokemon.Pokemon.Tipo;
 import com.vpr.pokemon.util.Util;
 
@@ -230,6 +226,8 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 	}
 	
 	private void refrescarLista() {
+		Modelo modelo = new Modelo();
+		panelBusqueda.inicializar(modelo.getPokemones());
 		panelBusqueda.refrescarLista();
 	}
 	
@@ -319,6 +317,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		pokemon = (Pokemon) panelBusqueda.getSeleccionado();
 		modelo.eliminarPokemon(pokemon);
 		Util.mensajeInformacion("Hecho", pokemon.getNombre() + " eliminado correctamente");
+		refrescarLista();
 		modoEdicion(false);
 	}
 	
@@ -367,7 +366,9 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		pokemon.setTipo((Tipo) cbTipo.getSelectedItem());
 		pokemon.setNivel(Integer.parseInt(tfNivel.getText()));
 		pokemon.setPeso(Float.parseFloat(tfPeso.getText()));
-		pokemon.getArmas().addAll(panelAnadirArma.getListaArmas());
+		//System.out.println(panelAnadirArma.getListaArmas().get(0).getNombre());
+		pokemon.setArmas(panelAnadirArma.getListaArmas());
+		//pokemon.getArmas().addAll(panelAnadirArma.getListaArmas());
 		
 		if(imagen != null)
 			pokemon.setImagen(imagen);

@@ -1,24 +1,16 @@
 package com.vpr.pokemon.beans;
 
 import javax.swing.JPanel;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 
-import java.awt.BorderLayout;
-import javax.swing.JToolBar;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JMenuBar;
-import javax.swing.JTabbedPane;
-import javax.swing.SpringLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.vpr.pokemon.Arma;
 import com.vpr.pokemon.Modelo;
-import com.vpr.pokemon.beans.JBotonesCrud.Accion;
 import com.vpr.pokemon.util.Util;
 
 import javax.swing.JLabel;
@@ -201,12 +193,16 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		arma.setDuracion(Integer.parseInt(tfDuracion.getText()));
 		
 		Modelo modelo = new Modelo();
-		modelo.guardar(arma);
 		
-		if(accion == Accion.MODIFICAR)
+		
+		if(accion == Accion.MODIFICAR) {
+			modelo.modificarArma(arma);
 			Util.mensajeInformacion("Hecho", "Arma modificada");
-		else
+		}
+		else {
+			modelo.guardar(arma);
 			Util.mensajeInformacion("Hecho", "Arma guardada");
+		}
 		
 		refrescarLista();
 		limpiar();

@@ -1,10 +1,8 @@
 package com.vpr.pokemon.beans;
 
 import javax.swing.JPanel;
-import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 
-import javax.swing.SpringLayout;
 import javax.swing.JButton;
 
 public class JBotonesCrud extends JPanel {

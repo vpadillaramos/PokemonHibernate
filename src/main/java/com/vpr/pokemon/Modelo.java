@@ -65,6 +65,12 @@ public class Modelo {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
 		sesion.save(pokemon);
+		
+		for(Arma arma : pokemon.getArmas()) {
+			arma.setPokemon(pokemon);
+			sesion.save(arma);
+		}
+		
 		sesion.getTransaction().commit();
 		sesion.close();
 	}

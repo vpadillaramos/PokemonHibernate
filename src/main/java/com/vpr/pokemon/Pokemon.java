@@ -107,7 +107,7 @@ public class Pokemon {
 	}
 
 	public void setArmas(List<Arma> armas) {
-		this.armas = armas;
+		this.armas.addAll(armas);
 	}
 
 	@Override

@@ -3,25 +3,14 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.TitledBorder;
-import javax.swing.JScrollPane;
-import javax.swing.JList;
-import javax.swing.JComboBox;
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 import javax.swing.JTabbedPane;
-import javax.swing.BoxLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 import com.vpr.pokemon.beans.JEstado;
 import com.vpr.pokemon.beans.JPanelArmas;
 import com.vpr.pokemon.beans.JPanelPokemon;
 import javax.swing.JMenu;
-import com.vpr.pokemon.beans.JComboGenerico;
 
 public class Vista extends JFrame {
 	public DefaultListModel<Pokemon> modelPokemon;

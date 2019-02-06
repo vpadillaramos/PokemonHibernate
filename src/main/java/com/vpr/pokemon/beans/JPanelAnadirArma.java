@@ -2,7 +2,6 @@ package com.vpr.pokemon.beans;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
@@ -11,11 +10,8 @@ import com.vpr.pokemon.Arma;
 import com.vpr.pokemon.Modelo;
 
 import javax.swing.JList;
-import java.awt.Rectangle;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 
-import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
