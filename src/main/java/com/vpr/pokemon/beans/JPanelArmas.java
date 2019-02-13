@@ -160,6 +160,7 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 	private void nuevaArma() {
 		limpiar();
 		modoEdicion(true);
+		tfNombre.requestFocus();
 		accion = Accion.NUEVO;
 	}
 	

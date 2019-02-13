@@ -107,6 +107,7 @@ public class Pokemon {
 	}
 
 	public void setArmas(List<Arma> armas) {
+		this.armas.clear();
 		this.armas.addAll(armas);
 	}
 

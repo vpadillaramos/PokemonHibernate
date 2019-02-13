@@ -14,7 +14,9 @@ import javax.swing.DefaultListModel;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
@@ -53,16 +55,14 @@ public class JPanelAnadirArma extends JPanel implements ActionListener{
 		lista.setModel(modelLista);
 		scrollPane.setViewportView(lista);
 		
-		
 		inicializar();
 	}
 	
 	//Metodos
 	private void inicializar() {
 		Modelo modelo = new Modelo();
-		List<Arma> armas = modelo.getArmas();
-		cbArmas.inicializar(armas);
-		cbArmas.refrescar();
+		List<Arma> armas = modelo.getArmasLibres();
+		cbArmas.refrescar(armas);
 		
 		btAnadir.addActionListener(this);
 		btEliminar.addActionListener(this);
@@ -84,18 +84,23 @@ public class JPanelAnadirArma extends JPanel implements ActionListener{
 	}
 	
 	public List<Arma> getListaArmas() {
-		List<Arma> armas = new ArrayList<>();
-		for(int i = 0; i < modelLista.size(); i++) {
-			armas.add((Arma) modelLista.getElementAt(i));
-		}
-		
-		return armas;
+		return Collections.list(modelLista.elements());
 	}
 	
 	public void anadirArmas(List<Arma> armas) {
 		modelLista.removeAllElements();
 		for(Arma a: armas)
 			modelLista.addElement(a);
+	}
+	
+	public void limpiar() {
+		modelLista.removeAllElements();
+	}
+	
+	public void refrescar() {
+		Modelo modelo = new Modelo();
+		modelLista.removeAllElements();
+		cbArmas.refrescar(modelo.getArmasLibres());
 	}
 	
 	@Override
@@ -115,7 +120,10 @@ public class JPanelAnadirArma extends JPanel implements ActionListener{
 		case "-":
 			if(lista.getSelectedIndex() == -1)
 				return;
-			
+			Modelo modelo = new Modelo();
+			Arma arma = lista.getSelectedValue();
+			arma.setPokemon(null);
+			modelo.modificarArma(arma);
 			cbArmas.addItem((Arma) modelLista.remove(lista.getSelectedIndex()));
 			
 			break;

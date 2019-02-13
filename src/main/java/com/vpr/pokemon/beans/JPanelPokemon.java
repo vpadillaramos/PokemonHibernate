@@ -2,6 +2,7 @@ package com.vpr.pokemon.beans;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
@@ -11,6 +12,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.vpr.pokemon.Arma;
 import com.vpr.pokemon.Modelo;
 import com.vpr.pokemon.Pokemon;
 
@@ -125,6 +127,12 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 	//Metodos
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		if(e.getSource() == btBorrarTodo) {
+			borrarTodo();
+			return;
+		}
+		
 		switch(JBotonesCrud.Accion.valueOf(e.getActionCommand())) {
 		case NUEVO:
 			nuevoPokemon();
@@ -221,6 +229,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		
 		//Listeners
 		botonesCrud.addListeners(this);
+		btBorrarTodo.addActionListener(this);
 		lbImagen.addMouseListener(this);
 		panelBusqueda.lista.addListSelectionListener(this);
 	}
@@ -229,6 +238,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		Modelo modelo = new Modelo();
 		panelBusqueda.inicializar(modelo.getPokemones());
 		panelBusqueda.refrescarLista();
+		panelAnadirArma.refrescar();
 	}
 	
 	private void limpiar() {
@@ -237,6 +247,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		tfNivel.setText("");
 		tfPeso.setText("");
 		lbImagen.setIcon(null);
+		panelAnadirArma.limpiar();
 	}
 	
 	private void modoEdicion(boolean b) {
@@ -289,14 +300,27 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 			lbImagen.setIcon(null);
 		
 		panelAnadirArma.anadirArmas(pokemonActual.getArmas());
+		for(Arma arma : pokemonActual.getArmas()) {
+			panelAnadirArma.cbArmas.removeItem(arma);
+		}
 		
 		botonesCrud.btModificar.setEnabled(true);
 		botonesCrud.btBorrar.setEnabled(true);
 	}
 	
+	private void borrarTodo() {
+		Modelo modelo = new Modelo();
+		
+		if(!Util.mensajeConfirmacion("¡ATENCIÓN!", "¿Quieres borrar todos los datos?"))
+			return;
+		modelo.borrarTodoPokemon();
+		refrescarLista();
+	}
+	
 	private void nuevoPokemon() {
 		limpiar();
 		modoEdicion(true);
+		tfNombre.requestFocus();
 		accion = Accion.NUEVO;
 	}
 	
@@ -318,6 +342,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		modelo.eliminarPokemon(pokemon);
 		Util.mensajeInformacion("Hecho", pokemon.getNombre() + " eliminado correctamente");
 		refrescarLista();
+		limpiar();
 		modoEdicion(false);
 	}
 	
@@ -333,7 +358,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		if(tfNivel.getText().equals(""))
 			tfNivel.setText("0");
 		if(!modelo.isInt(tfNivel.getText())) {
-			Util.mensajeError("Error", "El nivel debe ser un número");
+			Util.mensajeError("Error", "El nivel debe ser un entero");
 			tfNivel.selectAll();
 			tfNivel.requestFocus();
 			return;
@@ -341,8 +366,8 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		
 		if(tfPeso.getText().equals(""))
 			tfPeso.setText("0.0");
-		if(!modelo.isFloat(tfPeso.getText())) {
-			Util.mensajeError("Error", "El peso debe ser un número");
+		if(!modelo.isNumeric(tfPeso.getText())) {
+			Util.mensajeError("Error", "El peso debe ser numerico");
 			tfPeso.selectAll();
 			tfPeso.requestFocus();
 			return;
@@ -366,9 +391,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		pokemon.setTipo((Tipo) cbTipo.getSelectedItem());
 		pokemon.setNivel(Integer.parseInt(tfNivel.getText()));
 		pokemon.setPeso(Float.parseFloat(tfPeso.getText()));
-		//System.out.println(panelAnadirArma.getListaArmas().get(0).getNombre());
 		pokemon.setArmas(panelAnadirArma.getListaArmas());
-		//pokemon.getArmas().addAll(panelAnadirArma.getListaArmas());
 		
 		if(imagen != null)
 			pokemon.setImagen(imagen);

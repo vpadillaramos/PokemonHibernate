@@ -1,5 +1,7 @@
 package com.vpr.pokemon;
 import java.awt.BorderLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -7,6 +9,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JTabbedPane;
 import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import com.vpr.pokemon.beans.JEstado;
 import com.vpr.pokemon.beans.JPanelArmas;
 import com.vpr.pokemon.beans.JPanelPokemon;
@@ -49,6 +54,7 @@ public class Vista extends JFrame {
 		panel.add(toolBar, BorderLayout.SOUTH);
 		
 		estado = new JEstado();
+		estado.setMensajeConfirmacion("Pokemon Hibernate 1.0");
 		getContentPane().add(estado, BorderLayout.SOUTH);
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -66,7 +72,16 @@ public class Vista extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		
-		
+		tabbedPane.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if(tabbedPane.getSelectedIndex() == 0) {
+					panelPokemon.panelAnadirArma.refrescar();
+				}
+			}
+			
+		});
 		
 		repaint();
 	}

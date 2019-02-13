@@ -20,19 +20,8 @@ public class Controlador {
 	private Accion accion;
 	
 	public Controlador(Modelo modelo, Vista vista) {
-		this.modelo = modelo;
+		this.modelo = modelo; //en cuanto instancio el modelo, se conecta a la base de datos
 		this.vista = vista;
-		
-		//Conecto con la base de datos
-		try {
-			modelo.conectarDb();
-		} catch (ClassNotFoundException e) {
-			System.out.println("Error al conectar con la base de datos");
-			e.printStackTrace();
-		} catch (SQLException e) {
-			System.out.println("Error de SQL");
-			e.printStackTrace();
-		}
 		
 		//Inicio sesion
 		//    iniciarSesion();

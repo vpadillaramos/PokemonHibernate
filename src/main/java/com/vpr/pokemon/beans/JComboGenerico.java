@@ -15,13 +15,9 @@ public class JComboGenerico<T> extends JComboBox<T>{
 	}
 	
 	//Metodos
-	public void inicializar(List<T> datos) {
+	public void refrescar(List<T> datos) {
+		removeAllItems();
 		this.datos = datos;
-		listar();
-	}
-	
-	public void refrescar() {
-		limpiar();
 		listar();
 	}
 	
@@ -30,10 +26,6 @@ public class JComboGenerico<T> extends JComboBox<T>{
 			return;
 		for(T dato : datos)
 			addItem(dato);
-	}
-	
-	public void limpiar() {
-		removeAllItems();
 	}
 	
 	public T getDatoSeleccionada() {

@@ -48,11 +48,11 @@ public class Modelo {
 		HibernateUtil.closeSessionFactory();
 	}
 	
-	//Este metodo se invoca automaticamente al cerrar la aplicacion
+	/*//Este metodo se invoca automaticamente al cerrar la aplicacion
 	@Override
 	public void finalize() throws SQLException {
 		desconectarDb();
-	}
+	}*/
 	
 	
 	public boolean iniciarSesion(String usuario, String contrasena) {
@@ -68,7 +68,7 @@ public class Modelo {
 		
 		for(Arma arma : pokemon.getArmas()) {
 			arma.setPokemon(pokemon);
-			sesion.save(arma);
+			sesion.update(arma);
 		}
 		
 		sesion.getTransaction().commit();
@@ -86,7 +86,13 @@ public class Modelo {
 	public void modificarPokemon(Pokemon pokemon) {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
-		sesion.save(pokemon);
+		sesion.update(pokemon);
+		
+		for(Arma arma : pokemon.getArmas()) {
+			arma.setPokemon(pokemon);
+			sesion.update(arma);
+		}
+		
 		sesion.getTransaction().commit();
 		sesion.close();
 	}
@@ -94,7 +100,7 @@ public class Modelo {
 	public void modificarArma(Arma arma) {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
-		sesion.save(arma);
+		sesion.update(arma);
 		sesion.getTransaction().commit();
 		sesion.close();
 	}
@@ -111,6 +117,11 @@ public class Modelo {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
 		sesion.delete(pokemon);
+		
+		for(Arma arma : pokemon.getArmas()) {
+			arma.setPokemon(null);
+		}
+		
 		sesion.getTransaction().commit();
 		sesion.close();
 	}
@@ -126,7 +137,7 @@ public class Modelo {
 	public void borrarTodoPokemon() {
 		Session sesion = HibernateUtil.getCurrentSession();
 		Transaction tx = sesion.beginTransaction();
-		String hqDelete = "delete Pokemon";
+		sesion.createSQLQuery("").executeUpdate();
 	}
 	
 	public void borrarTodoArma() {
@@ -173,9 +184,9 @@ public class Modelo {
 	 * @param cadena
 	 * @return
 	 */
-	public boolean isFloat(String cadena) {
+	public boolean isNumeric(String cadena) {
 		boolean resultado = false;
-		if(cadena.matches("\\d*\\.\\d*") || cadena.matches("\\d*\\,\\d*"))	//esto es una expresion regular que comprueba si son numeros
+		if(cadena.matches("\\d*\\.\\d*") || cadena.matches("\\d*\\,\\d*") || cadena.matches("\\d*"))	//esto es una expresion regular que comprueba si son numeros
 			resultado = true;
 		cadena = cadena.replaceAll(",", ".");
 		return resultado;
