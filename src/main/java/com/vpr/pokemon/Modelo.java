@@ -120,6 +120,7 @@ public class Modelo {
 		
 		for(Arma arma : pokemon.getArmas()) {
 			arma.setPokemon(null);
+			sesion.update(arma);
 		}
 		
 		sesion.getTransaction().commit();
@@ -163,7 +164,7 @@ public class Modelo {
 	public List<Arma> getArmasLibres(){
 		Session sesion = HibernateUtil.getCurrentSession();
 		List<Arma> armas = sesion.createQuery("FROM Arma a WHERE a.pokemon IS NULL").list();
-		
+		sesion.close();
 		return armas;
 	}
 	

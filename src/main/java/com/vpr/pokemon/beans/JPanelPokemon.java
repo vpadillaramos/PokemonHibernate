@@ -9,6 +9,8 @@ import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -26,10 +28,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import com.vpr.pokemon.Pokemon.Tipo;
 import com.vpr.pokemon.util.Util;
 
-public class JPanelPokemon extends JPanel implements ActionListener, ListSelectionListener, MouseListener {
+public class JPanelPokemon extends JPanel implements ActionListener, ListSelectionListener, MouseListener, DocumentListener {
 	public JBotonesCrud botonesCrud;
 	public JLabel lblNombre;
 	public JLabel lblNivel;
@@ -232,6 +239,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		btBorrarTodo.addActionListener(this);
 		lbImagen.addMouseListener(this);
 		panelBusqueda.lista.addListSelectionListener(this);
+		panelBusqueda.tfBuscar.getDocument().addDocumentListener(this);
 	}
 	
 	private void refrescarLista() {
@@ -281,6 +289,10 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 			panelBusqueda.lista.clearSelection();
 		}
 		
+	}
+	
+	private List<Pokemon> getListaPokemon() {
+		return Collections.list(panelBusqueda.modelo.elements());
 	}
 	
 	private void poblarDesplegableTipos() {
@@ -413,5 +425,32 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		limpiar();
 		modoEdicion(false);
 	}
-	
+
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		String cadena = panelBusqueda.tfBuscar.getText().toLowerCase();
+		
+		for(Pokemon p : getListaPokemon()) {
+			if(!p.getNombre().toLowerCase().contains(cadena)) 
+				panelBusqueda.modelo.removeElement(p);
+		}
+	}
+
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		String cadena = panelBusqueda.tfBuscar.getText().toLowerCase();
+		Modelo modelo = new Modelo();
+		for(Pokemon p : modelo.getPokemones()) {
+			if(!panelBusqueda.modelo.contains(p) && p.getNombre().toLowerCase().contains(cadena))
+				panelBusqueda.modelo.addElement(p);
+		}
+	}
+
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		
+	}
 }
