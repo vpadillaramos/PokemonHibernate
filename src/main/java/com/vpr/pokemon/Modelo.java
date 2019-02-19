@@ -137,14 +137,30 @@ public class Modelo {
 	
 	public void borrarTodoPokemon() {
 		Session sesion = HibernateUtil.getCurrentSession();
-		Transaction tx = sesion.beginTransaction();
-		sesion.createSQLQuery("").executeUpdate();
+		sesion.beginTransaction();
+		
+		for(Arma arma : getArmas()) {
+			arma.setPokemon(null);
+			sesion.update(arma);
+		}
+		
+		sesion.createSQLQuery("TRUNCATE TABLE pokemon").executeUpdate();
+		sesion.getTransaction().commit();
+		sesion.close();
 	}
 	
 	public void borrarTodoArma() {
 		Session sesion = HibernateUtil.getCurrentSession();
-		Transaction tx = sesion.beginTransaction();
-		String hqDelete = "delete Arma";
+		sesion.beginTransaction();
+		
+		for(Pokemon pokemon : getPokemones()) {
+			pokemon.getArmas().clear();
+			sesion.update(pokemon);
+		}
+		
+		sesion.createSQLQuery("TRUNCATE TABLE armas").executeUpdate();
+		sesion.getTransaction().commit();
+		sesion.close();
 	}
 	
 	public ArrayList<Pokemon> getPokemones() {

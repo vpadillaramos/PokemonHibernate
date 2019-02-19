@@ -65,6 +65,7 @@ public class Vista extends JFrame {
 		tabbedPane.addTab("Pokemon", null, panelPokemon, null);
 		
 		panelArmas = new JPanelArmas();
+		panelArmas.btBorrarTodo.setLocation(328, 346);
 		tabbedPane.addTab("Arma", null, panelArmas, null);
 		
 		modelPokemon = new DefaultListModel();
@@ -78,6 +79,7 @@ public class Vista extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				if(tabbedPane.getSelectedIndex() == 0) {
 					panelPokemon.panelAnadirArma.refrescar();
+					panelPokemon.panelBusqueda.refrescarLista();
 				}
 			}
 			

@@ -164,7 +164,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		//SI no hay nadfa seleccionado
+		//Si no hay nada seleccionado
 		if(panelBusqueda.lista.getSelectedIndex() == -1)
 			return;
 		pokemonActual = (Pokemon) panelBusqueda.lista.getSelectedValue();
@@ -261,6 +261,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 	private void modoEdicion(boolean b) {
 		if(b) {
 			botonesCrud.modoEdicion(b);
+			btBorrarTodo.setEnabled(!b);
 			panelAnadirArma.modoEdicion(b);
 			
 			tfNombre.setEditable(b);
@@ -275,6 +276,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		}
 		else {
 			botonesCrud.modoEdicion(b);
+			btBorrarTodo.setEnabled(!b);
 			panelAnadirArma.modoEdicion(b);
 			
 			tfNombre.setEditable(b);
@@ -323,7 +325,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 	private void borrarTodo() {
 		Modelo modelo = new Modelo();
 		
-		if(!Util.mensajeConfirmacion("¡ATENCIÓN!", "¿Quieres borrar todos los datos?"))
+		if(!Util.mensajeConfirmacion("¡ATENCIÓN!", "¿Quieres borrar todos los pokemon?"))
 			return;
 		modelo.borrarTodoPokemon();
 		refrescarLista();
@@ -399,10 +401,10 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		}
 		
 		//Recogida de datos
-		pokemon.setNombre(tfNombre.getText());
+		pokemon.setNombre(tfNombre.getText().trim());
 		pokemon.setTipo((Tipo) cbTipo.getSelectedItem());
-		pokemon.setNivel(Integer.parseInt(tfNivel.getText()));
-		pokemon.setPeso(Float.parseFloat(tfPeso.getText()));
+		pokemon.setNivel(Integer.parseInt(tfNivel.getText().trim()));
+		pokemon.setPeso(Float.parseFloat(tfPeso.getText().trim()));
 		pokemon.setArmas(panelAnadirArma.getListaArmas());
 		
 		if(imagen != null)

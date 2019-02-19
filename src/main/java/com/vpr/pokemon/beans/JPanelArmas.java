@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.JButton;
 
 public class JPanelArmas extends JPanel implements ActionListener, ListSelectionListener {
 	public JBotonesCrud botonesCrud;
@@ -35,6 +36,7 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 	}
 	private Accion accion;
 	private Arma armaActual;
+	public JButton btBorrarTodo;
 
 	public JPanelArmas() {
 		setLayout(null);
@@ -80,6 +82,10 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		listArmas.setModel(modelArma);
 		scrollPane.setViewportView(listArmas);
 		
+		btBorrarTodo = new JButton("Borrar todo");
+		btBorrarTodo.setBounds(328, 266, 102, 23);
+		add(btBorrarTodo);
+		
 		iniciar();
 		
 	}
@@ -88,11 +94,18 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		refrescarLista();
 		modoEdicion(false);
 		botonesCrud.addListeners(this);
+		btBorrarTodo.addActionListener(this);
 		listArmas.addListSelectionListener(this);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		if(e.getSource() == btBorrarTodo) {
+			borrarTodo();
+			return;
+		}
+		
 		switch(JBotonesCrud.Accion.valueOf(e.getActionCommand())) {
 		case NUEVO:
 			nuevaArma();
@@ -157,6 +170,15 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		modoEdicion(false);
 	}
 	
+	private void borrarTodo() {
+		Modelo modelo = new Modelo();
+		
+		if(!Util.mensajeConfirmacion("¡ATENCIÓN!", "¿Quieres borrar todas las armas?"))
+			return;
+		modelo.borrarTodoArma();
+		refrescarLista();
+	}
+	
 	private void nuevaArma() {
 		limpiar();
 		modoEdicion(true);
@@ -170,8 +192,30 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 	}
 	
 	public void guardarArma() {
+		Modelo modelo = new Modelo();
 		if(tfNombre.getText().equals("")) {
 			Util.mensajeError("Error", "El nombre es obligatorio");
+			tfNombre.selectAll();
+			tfNombre.requestFocus();
+			return;
+		}
+		
+		if(tfAtaque.getText().trim().equals(""))
+			tfAtaque.setText("0");
+		if(!modelo.isInt(tfAtaque.getText().trim())) {
+			Util.mensajeError("Error", "El ataque debe ser entero");
+			tfAtaque.selectAll();
+			tfAtaque.requestFocus();
+			return;
+		}
+		
+		if(tfDuracion.getText().trim().equals(""))
+			tfDuracion.setText("0");
+		if(!modelo.isInt(tfDuracion.getText().trim())) {
+			Util.mensajeError("Error", "La duración debe ser entera");
+			tfDuracion.selectAll();
+			tfDuracion.requestFocus();
+			return;
 		}
 		
 		Arma arma = null;
@@ -189,11 +233,9 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		}
 		
 		//recogida de datos
-		arma.setNombre(tfNombre.getText());
-		arma.setAtaque(Integer.parseInt(tfAtaque.getText()));
-		arma.setDuracion(Integer.parseInt(tfDuracion.getText()));
-		
-		Modelo modelo = new Modelo();
+		arma.setNombre(tfNombre.getText().trim());
+		arma.setAtaque(Integer.parseInt(tfAtaque.getText().trim()));
+		arma.setDuracion(Integer.parseInt(tfDuracion.getText().trim()));
 		
 		
 		if(accion == Accion.MODIFICAR) {
