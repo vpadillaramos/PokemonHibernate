@@ -32,11 +32,12 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 	public DefaultListModel<Arma> modelArma;
 	
 	private enum Accion{
-		NUEVO, MODIFICAR
+		NUEVO, MODIFICAR, DESHACER
 	}
 	private Accion accion;
 	private Arma armaActual;
 	public JButton btBorrarTodo;
+	public JButton btDeshacer;
 
 	public JPanelArmas() {
 		setLayout(null);
@@ -86,6 +87,15 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		btBorrarTodo.setBounds(328, 266, 102, 23);
 		add(btBorrarTodo);
 		
+		btDeshacer = new JButton("Deshacer borrado");
+		btDeshacer.setActionCommand("DESHACER");
+		btDeshacer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btDeshacer.setBounds(269, 232, 161, 23);
+		add(btDeshacer);
+		
 		iniciar();
 		
 	}
@@ -95,6 +105,7 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		modoEdicion(false);
 		botonesCrud.addListeners(this);
 		btBorrarTodo.addActionListener(this);
+		btDeshacer.addActionListener(this);
 		listArmas.addListSelectionListener(this);
 	}
 	
@@ -104,6 +115,10 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		if(e.getSource() == btBorrarTodo) {
 			borrarTodo();
 			return;
+		}
+		
+		if(e.getSource() == btDeshacer) {
+			
 		}
 		
 		switch(JBotonesCrud.Accion.valueOf(e.getActionCommand())) {
@@ -146,6 +161,8 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 	public void modoEdicion(boolean b) {
 		if(b) {
 			botonesCrud.modoEdicion(b);
+			btBorrarTodo.setEnabled(!b);
+			btDeshacer.setEnabled(!b);
 			
 			tfNombre.setEditable(b);
 			tfAtaque.setEditable(b);
@@ -153,6 +170,8 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		}
 		else {
 			botonesCrud.modoEdicion(b);
+			btBorrarTodo.setEnabled(!b);
+			btDeshacer.setEnabled(!b);
 			
 			tfNombre.setEditable(b);
 			tfAtaque.setEditable(b);
@@ -170,6 +189,14 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		modoEdicion(false);
 	}
 	
+	private void deshacer() {
+		Modelo modelo = new Modelo();
+		if(modelo.deshacerArma()) {
+			Util.mensajeInformacion("Hecho", "Arma recuperada");
+			refrescarLista();
+		}
+	}
+	
 	private void borrarTodo() {
 		Modelo modelo = new Modelo();
 		
@@ -177,6 +204,8 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 			return;
 		modelo.borrarTodoArma();
 		refrescarLista();
+		
+		Util.mensajeInformacion("Hecho", "Todas las armas han sido borradas correctamente");
 	}
 	
 	private void nuevaArma() {

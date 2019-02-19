@@ -54,11 +54,12 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 	
 	//Atributos
 	private enum Accion {
-		NUEVO, MODIFICAR
+		NUEVO, MODIFICAR, DESHACER
 	}
 	private Accion accion;
 	private Pokemon pokemonActual;
 	private byte[] imagen;
+	public JButton btDeshacer;
 	
 
 	public JPanelPokemon() {
@@ -115,6 +116,11 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		lbImagen.setBounds(237, 21, 71, 65);
 		add(lbImagen);
 		
+		btDeshacer = new JButton("Deshacer borrado");
+		btDeshacer.setActionCommand("DESHACER");
+		btDeshacer.setBounds(353, 224, 151, 23);
+		add(btDeshacer);
+		
 		panelBusqueda = new JPanelBusqueda();
 		panelBusqueda.setBounds(353, 23, 151, 190);
 		add(panelBusqueda);
@@ -137,6 +143,11 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		
 		if(e.getSource() == btBorrarTodo) {
 			borrarTodo();
+			return;
+		}
+		
+		if(e.getSource() == btDeshacer) {
+			deshacer();
 			return;
 		}
 		
@@ -237,6 +248,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		//Listeners
 		botonesCrud.addListeners(this);
 		btBorrarTodo.addActionListener(this);
+		btDeshacer.addActionListener(this);
 		lbImagen.addMouseListener(this);
 		panelBusqueda.lista.addListSelectionListener(this);
 		panelBusqueda.tfBuscar.getDocument().addDocumentListener(this);
@@ -262,6 +274,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		if(b) {
 			botonesCrud.modoEdicion(b);
 			btBorrarTodo.setEnabled(!b);
+			btDeshacer.setEnabled(!b);
 			panelAnadirArma.modoEdicion(b);
 			
 			tfNombre.setEditable(b);
@@ -277,6 +290,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		else {
 			botonesCrud.modoEdicion(b);
 			btBorrarTodo.setEnabled(!b);
+			btDeshacer.setEnabled(!b);
 			panelAnadirArma.modoEdicion(b);
 			
 			tfNombre.setEditable(b);
@@ -322,6 +336,14 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		botonesCrud.btBorrar.setEnabled(true);
 	}
 	
+	private void deshacer() {
+		Modelo modelo = new Modelo();
+		if(modelo.deshacerPokemon()) {
+			refrescarLista();
+			Util.mensajeInformacion("Hecho", "Pokemon recuperado");
+		}
+	}
+	
 	private void borrarTodo() {
 		Modelo modelo = new Modelo();
 		
@@ -329,6 +351,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 			return;
 		modelo.borrarTodoPokemon();
 		refrescarLista();
+		Util.mensajeInformacion("Hecho", "Todos los pokemon han sido borrados correctamente");
 	}
 	
 	private void nuevoPokemon() {

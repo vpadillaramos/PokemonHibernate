@@ -95,6 +95,11 @@ public class Login extends JDialog implements ActionListener, KeyListener{
 		switch(e.getActionCommand()) {
 		case "login":
 			usuario = tfUsuario.getText();
+			if(usuario.equals("")) {
+				mensajeError("Error en el usuario o contraseña");
+				return;
+			}
+			
 			contrasena = String.valueOf(tfContrasena.getPassword());
 			setVisible(false);
 			break;

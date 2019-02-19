@@ -13,7 +13,7 @@ public class JBotonesCrud extends JPanel {
 	public JButton btBorrar;
 	
 	public static enum Accion{
-		NUEVO, MODIFICAR, GUARDAR, CANCELAR, BORRAR, BORRAR_TODO
+		NUEVO, MODIFICAR, GUARDAR, CANCELAR, BORRAR
 	}
 
 	public JBotonesCrud() {

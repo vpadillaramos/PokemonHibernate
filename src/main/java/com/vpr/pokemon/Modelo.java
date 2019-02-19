@@ -15,19 +15,12 @@ import com.vpr.pokemon.util.HibernateUtil;
 
 
 public class Modelo {
-	//Constantes
-	private final String IP = "192.168.34.5"; //192.168.34.5 casa:127.0.0.1
-	private final String BD = "vpadilla";
-	private final String USUARIO = "vpadilla";
-	private final String CONTRASENA = "42ha3h";
-	
 	//Variables
-	private static Connection conexion;
-	private PreparedStatement sentencia = null;
-	private ResultSet resultado = null;
 	private ArrayList<Pokemon> listPokemon;
 	private ArrayList<Arma> listArmas;
 	private Query query;
+	private Pokemon ultimoPokemonBorrado;
+	private Arma ultimaArmaBorrada;
 	
 	public Modelo() {
 		try {
@@ -56,7 +49,17 @@ public class Modelo {
 	
 	
 	public boolean iniciarSesion(String usuario, String contrasena) {
-		query = HibernateUtil.getCurrentSession().createQuery("");
+		Session sesion = HibernateUtil.getCurrentSession();
+		Query query = sesion.createSQLQuery("SELECT usuario FROM usuarios u WHERE u.usuario = :usuario and u.contrasena = :contrasena");
+		query.setParameter("usuario", usuario);
+		query.setParameter("contrasena", contrasena);
+		Object o = query.uniqueResult();
+		sesion.close();
+		
+		//Si lo ha encontrado
+		if(o != null)
+			return true;
+		
 		return false;
 	}
 	
@@ -116,8 +119,14 @@ public class Modelo {
 	public void eliminarPokemon(Pokemon pokemon) {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
+		
+		//Guardo el ultimo borrado
+		ultimoPokemonBorrado = pokemon;
+		
+		//Borro
 		sesion.delete(pokemon);
 		
+		//Pongo sus armas a null
 		for(Arma arma : pokemon.getArmas()) {
 			arma.setPokemon(null);
 			sesion.update(arma);
@@ -130,9 +139,34 @@ public class Modelo {
 	public void eliminarArma(Arma arma) {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
+		
+		//Guardo la ultima borrada
+		ultimaArmaBorrada = arma;
+		
+		//Borro
 		sesion.delete(arma);
 		sesion.getTransaction().commit();
 		sesion.close();
+	}
+	
+	public boolean deshacerPokemon() {
+		if(ultimoPokemonBorrado != null) {
+			guardar(ultimoPokemonBorrado);
+			ultimoPokemonBorrado = null;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean deshacerArma() {
+		if(ultimaArmaBorrada != null) {
+			guardar(ultimaArmaBorrada);
+			ultimaArmaBorrada = null;
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void borrarTodoPokemon() {

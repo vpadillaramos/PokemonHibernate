@@ -21,14 +21,10 @@ public class Vista extends JFrame {
 	public DefaultListModel<Pokemon> modelPokemon;
 	public DefaultListModel<Arma> modelArma;
 	public JPanel panel;
-	public JMenuBar menuBar;
-	public JToolBar toolBar;
 	public JEstado estado;
 	public JTabbedPane tabbedPane;
 	public JPanelArmas panelArmas;
 	public JPanelPokemon panelPokemon;
-	public JMenu mnNewMenu;
-	public JMenu mnOpciones;
 
 	public Vista() {
 		setSize(548,498);
@@ -40,18 +36,6 @@ public class Vista extends JFrame {
 		panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.NORTH);
 		panel.setLayout(new BorderLayout(0, 0));
-		
-		menuBar = new JMenuBar();
-		panel.add(menuBar);
-		
-		mnNewMenu = new JMenu("Archivo");
-		menuBar.add(mnNewMenu);
-		
-		mnOpciones = new JMenu("Opciones");
-		menuBar.add(mnOpciones);
-		
-		toolBar = new JToolBar();
-		panel.add(toolBar, BorderLayout.SOUTH);
 		
 		estado = new JEstado();
 		estado.setMensajeConfirmacion("Pokemon Hibernate 1.0");

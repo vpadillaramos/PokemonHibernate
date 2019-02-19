@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import com.vpr.pokemon.ui.Login;
 
+
 public class Controlador {
 	
 	//Atributos
@@ -24,7 +25,7 @@ public class Controlador {
 		this.vista = vista;
 		
 		//Inicio sesion
-		//    iniciarSesion();
+		//iniciarSesion();
 		
 		refrescarLista();
 		vista.hacerVisible(true);
