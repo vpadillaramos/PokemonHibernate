@@ -118,7 +118,8 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 		}
 		
 		if(e.getSource() == btDeshacer) {
-			
+			deshacer();
+			return;
 		}
 		
 		switch(JBotonesCrud.Accion.valueOf(e.getActionCommand())) {
@@ -192,9 +193,12 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 	private void deshacer() {
 		Modelo modelo = new Modelo();
 		if(modelo.deshacerArma()) {
-			Util.mensajeInformacion("Hecho", "Arma recuperada");
 			refrescarLista();
+			Util.mensajeInformacion("Hecho", "Arma recuperada");
 		}
+		else 
+			Util.mensajeInformacion("Deshacer", "Nada que deshacer");
+		
 	}
 	
 	private void borrarTodo() {

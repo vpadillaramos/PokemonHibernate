@@ -66,6 +66,16 @@ public class Arma {
 		this.pokemon = pokemon;
 	}
 	
+	public Arma clone() {
+		Arma a = new Arma();
+		a.setNombre(nombre);
+		a.setAtaque(ataque);
+		a.setDuracion(duracion);
+		a.setPokemon(pokemon);
+		
+		return a;
+	}
+	
 	@Override
 	public String toString() {
 		return nombre;

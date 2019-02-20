@@ -342,6 +342,8 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 			refrescarLista();
 			Util.mensajeInformacion("Hecho", "Pokemon recuperado");
 		}
+		else
+			Util.mensajeInformacion("Deshacer", "Nada que deshacer");
 	}
 	
 	private void borrarTodo() {
@@ -369,6 +371,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 	
 	private void cancelar() {
 		limpiar();
+		panelAnadirArma.cbArmas.refrescar(new Modelo().getArmasLibres());
 		modoEdicion(false);
 	}
 	

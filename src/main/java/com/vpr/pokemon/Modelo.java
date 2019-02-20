@@ -19,8 +19,8 @@ public class Modelo {
 	private ArrayList<Pokemon> listPokemon;
 	private ArrayList<Arma> listArmas;
 	private Query query;
-	private Pokemon ultimoPokemonBorrado;
-	private Arma ultimaArmaBorrada;
+	private static Pokemon ultimoPokemonBorrado;
+	private static Arma ultimaArmaBorrada;
 	
 	public Modelo() {
 		try {
@@ -100,7 +100,7 @@ public class Modelo {
 		sesion.close();
 	}
 	
-	public void modificarArma(Arma arma) {
+	public synchronized void modificarArma(Arma arma) {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
 		sesion.update(arma);
@@ -117,13 +117,13 @@ public class Modelo {
 	}
 	
 	public void eliminarPokemon(Pokemon pokemon) {
+		//Guardo el ultimo borrado
+		ultimoPokemonBorrado = pokemon.clone();
+		ultimoPokemonBorrado.getArmas().clear();
+		System.out.println(pokemon.getArmas().size());
+		
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
-		
-		//Guardo el ultimo borrado
-		ultimoPokemonBorrado = pokemon;
-		
-		//Borro
 		sesion.delete(pokemon);
 		
 		//Pongo sus armas a null
@@ -137,16 +137,16 @@ public class Modelo {
 	}
 	
 	public void eliminarArma(Arma arma) {
+		//Guardo la ultima borrada
+		ultimaArmaBorrada = arma.clone();
+		
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
-		
-		//Guardo la ultima borrada
-		ultimaArmaBorrada = arma;
-		
-		//Borro
 		sesion.delete(arma);
 		sesion.getTransaction().commit();
 		sesion.close();
+		
+		System.out.println(ultimaArmaBorrada);
 	}
 	
 	public boolean deshacerPokemon() {

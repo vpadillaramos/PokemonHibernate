@@ -110,6 +110,18 @@ public class Pokemon {
 		this.armas.clear();
 		this.armas.addAll(armas);
 	}
+	
+	public Pokemon clone() {
+		Pokemon p = new Pokemon();
+		p.setNombre(nombre);
+		p.setTipo(tipo);
+		p.setNivel(nivel);
+		p.setPeso(peso);
+		p.setImagen(imagen);
+		p.setArmas(p.getArmas());
+		
+		return p;
+	}
 
 	@Override
 	public String toString() {
