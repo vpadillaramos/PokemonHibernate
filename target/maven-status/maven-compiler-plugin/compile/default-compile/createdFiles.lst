@@ -8,6 +8,7 @@ com\vpr\pokemon\Controlador$Accion.class
 com\vpr\pokemon\Pokemon$Tipo.class
 com\vpr\pokemon\ui\Login.class
 com\vpr\pokemon\Aplicacion.class
+com\vpr\pokemon\beans\JPanelArmas$2.class
 com\vpr\pokemon\beans\JPanelBusqueda.class
 com\vpr\pokemon\beans\JBotonesCrud$Accion.class
 com\vpr\pokemon\beans\JPanelPokemon$Accion.class

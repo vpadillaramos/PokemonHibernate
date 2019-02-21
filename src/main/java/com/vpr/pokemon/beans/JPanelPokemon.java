@@ -30,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -242,8 +243,8 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		Modelo modelo = new Modelo();
 		modoEdicion(false);
 		poblarDesplegableTipos();
-		panelBusqueda.inicializar(modelo.getPokemones());
-		refrescarLista();
+		panelBusqueda.refrescar(modelo.getPokemones());
+		refrescar();
 		
 		//Listeners
 		botonesCrud.addListeners(this);
@@ -254,10 +255,13 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		panelBusqueda.tfBuscar.getDocument().addDocumentListener(this);
 	}
 	
-	private void refrescarLista() {
+	public void refrescar() {
 		Modelo modelo = new Modelo();
-		panelBusqueda.inicializar(modelo.getPokemones());
-		panelBusqueda.refrescarLista();
+		
+		//Ordeno los pokemon alfabeticamente
+		List<Pokemon> aux = modelo.getPokemones();
+		aux.sort(Comparator.comparing(Pokemon::getNombre));
+		panelBusqueda.refrescar(aux);
 		panelAnadirArma.refrescar();
 	}
 	
@@ -339,7 +343,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 	private void deshacer() {
 		Modelo modelo = new Modelo();
 		if(modelo.deshacerPokemon()) {
-			refrescarLista();
+			refrescar();
 			Util.mensajeInformacion("Hecho", "Pokemon recuperado");
 		}
 		else
@@ -352,7 +356,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		if(!Util.mensajeConfirmacion("¡ATENCIÓN!", "¿Quieres borrar todos los pokemon?"))
 			return;
 		modelo.borrarTodoPokemon();
-		refrescarLista();
+		refrescar();
 		Util.mensajeInformacion("Hecho", "Todos los pokemon han sido borrados correctamente");
 	}
 	
@@ -381,7 +385,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		pokemon = (Pokemon) panelBusqueda.getSeleccionado();
 		modelo.eliminarPokemon(pokemon);
 		Util.mensajeInformacion("Hecho", pokemon.getNombre() + " eliminado correctamente");
-		refrescarLista();
+		refrescar();
 		limpiar();
 		modoEdicion(false);
 	}
@@ -449,7 +453,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 			Util.mensajeInformacion("Hecho", "Pokemon guardado");
 		}
 		
-		refrescarLista();
+		refrescar();
 		limpiar();
 		modoEdicion(false);
 	}

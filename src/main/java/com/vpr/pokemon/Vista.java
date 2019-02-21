@@ -61,10 +61,8 @@ public class Vista extends JFrame {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				if(tabbedPane.getSelectedIndex() == 0) {
-					panelPokemon.panelAnadirArma.refrescar();
-					panelPokemon.panelBusqueda.refrescarLista();
-				}
+				if(tabbedPane.getSelectedIndex() == 0) 
+					panelPokemon.refrescar();
 			}
 			
 		});

@@ -33,19 +33,7 @@ public class JPanelBusqueda<T> extends JPanel {
 	}
 	
 	//Metodos
-	public void inicializar(List<T> datos) {
-		this.datos = datos;
-		listar();
-	}
-	
-	public void listar() {
-		if(datos == null)
-			return;
-		for(T dato : datos)
-			modelo.addElement(dato);
-	}
-	
-	public void refrescarLista() {
+	public void refrescar(List<T> datos) {
 		if(datos == null)
 			return;
 		

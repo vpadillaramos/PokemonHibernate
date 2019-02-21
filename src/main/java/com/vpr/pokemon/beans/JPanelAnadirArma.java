@@ -15,6 +15,7 @@ import javax.swing.DefaultListModel;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
@@ -59,8 +60,11 @@ public class JPanelAnadirArma extends JPanel implements ActionListener{
 	//Metodos
 	private void inicializar() {
 		Modelo modelo = new Modelo();
-		List<Arma> armas = modelo.getArmasLibres();
-		cbArmas.refrescar(armas);
+		
+		//Ordeno las armas alfabeticamente en el combobox
+		List<Arma> aux = modelo.getArmasLibres();
+		aux.sort(Comparator.comparing(Arma::getNombre));
+		cbArmas.refrescar(aux);
 		
 		btAnadir.addActionListener(this);
 		btEliminar.addActionListener(this);

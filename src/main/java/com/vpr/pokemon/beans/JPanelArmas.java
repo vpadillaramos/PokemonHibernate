@@ -5,6 +5,8 @@ import javax.swing.DefaultListModel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -294,7 +296,9 @@ public class JPanelArmas extends JPanel implements ActionListener, ListSelection
 	private void refrescarLista() {
 		modelArma.removeAllElements();
 		Modelo modelo = new Modelo();
-		for(Arma a: modelo.getArmas())
+		List<Arma> aux = modelo.getArmas();
+		aux.sort(Comparator.comparing(Arma::getNombre));
+		for(Arma a: aux)
 			modelArma.addElement(a);
 	}
 
