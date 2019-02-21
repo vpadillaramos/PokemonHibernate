@@ -240,10 +240,8 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 	}
 	
 	public void iniciar() {
-		Modelo modelo = new Modelo();
 		modoEdicion(false);
 		poblarDesplegableTipos();
-		panelBusqueda.refrescar(modelo.getPokemones());
 		refrescar();
 		
 		//Listeners
@@ -331,7 +329,11 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		else
 			lbImagen.setIcon(null);
 		
+		//Muestro las armas en la lista
 		panelAnadirArma.anadirArmas(pokemonActual.getArmas());
+		
+		//Quito las armas que ya tiene
+		panelAnadirArma.cbArmas.refrescar(new Modelo().getArmas()); //TODO ordenar esta lista
 		for(Arma arma : pokemonActual.getArmas()) {
 			panelAnadirArma.cbArmas.removeItem(arma);
 		}
@@ -375,7 +377,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 	
 	private void cancelar() {
 		limpiar();
-		panelAnadirArma.cbArmas.refrescar(new Modelo().getArmasLibres());
+		refrescar();
 		modoEdicion(false);
 	}
 	

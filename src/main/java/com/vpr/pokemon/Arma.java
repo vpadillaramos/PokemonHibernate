@@ -1,9 +1,12 @@
 package com.vpr.pokemon;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name="armas")
+@Table(name="armas2")
 public class Arma {
 	//Atributos
 	@Id
@@ -18,12 +21,13 @@ public class Arma {
 	private int duracion;
 	
 	//Relacion con la tabla Pokemon
-	@ManyToOne
-	@JoinColumn(name="id_pokemon")
-	private Pokemon pokemon;
+	@ManyToMany(cascade = CascadeType.DETACH, mappedBy = "armas", fetch = FetchType.EAGER)
+	private List<Pokemon> pokemones;
 	
 	//Constructor
-	public Arma() {}
+	public Arma() {
+		pokemones = new ArrayList<>();
+	}
 	
 	//Metodos
 	public long getId() {
@@ -42,10 +46,6 @@ public class Arma {
 		return duracion;
 	}
 
-	public Pokemon getPokemon() {
-		return pokemon;
-	}
-
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -61,17 +61,22 @@ public class Arma {
 	public void setDuracion(int duracion) {
 		this.duracion = duracion;
 	}
-
-	public void setPokemon(Pokemon pokemon) {
-		this.pokemon = pokemon;
-	}
 	
+	public List<Pokemon> getPokemones() {
+		return pokemones;
+	}
+
+	public void setPokemones(List<Pokemon> pokemones) {
+		this.pokemones.clear();
+		this.pokemones.addAll(pokemones);
+	}
+
 	public Arma clone() {
 		Arma a = new Arma();
 		a.setNombre(nombre);
 		a.setAtaque(ataque);
 		a.setDuracion(duracion);
-		a.setPokemon(pokemon);
+		a.setPokemones(getPokemones());
 		
 		return a;
 	}

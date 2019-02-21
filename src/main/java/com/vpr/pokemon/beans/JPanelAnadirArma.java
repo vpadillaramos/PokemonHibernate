@@ -62,7 +62,7 @@ public class JPanelAnadirArma extends JPanel implements ActionListener{
 		Modelo modelo = new Modelo();
 		
 		//Ordeno las armas alfabeticamente en el combobox
-		List<Arma> aux = modelo.getArmasLibres();
+		List<Arma> aux = modelo.getArmas();
 		aux.sort(Comparator.comparing(Arma::getNombre));
 		cbArmas.refrescar(aux);
 		
@@ -102,7 +102,10 @@ public class JPanelAnadirArma extends JPanel implements ActionListener{
 	public void refrescar() {
 		Modelo modelo = new Modelo();
 		modelLista.removeAllElements();
-		cbArmas.refrescar(modelo.getArmasLibres());
+		
+		List<Arma> aux = modelo.getArmas();
+		aux.sort(Comparator.comparing(Arma::getNombre));
+		cbArmas.refrescar(aux);
 	}
 	
 	@Override
@@ -122,10 +125,10 @@ public class JPanelAnadirArma extends JPanel implements ActionListener{
 		case "-":
 			if(lista.getSelectedIndex() == -1)
 				return;
-			Modelo modelo = new Modelo();
+			/*Modelo modelo = new Modelo();
 			Arma arma = lista.getSelectedValue();
 			arma.setPokemon(null);
-			modelo.modificarArma(arma);
+			modelo.modificarArma(arma);*/
 			cbArmas.addItem((Arma) modelLista.remove(lista.getSelectedIndex()));
 			
 			break;

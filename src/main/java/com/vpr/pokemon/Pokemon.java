@@ -30,7 +30,10 @@ public class Pokemon {
 	private byte[] imagen;
 	
 	//Relacion con la tabla Arma
-	@OneToMany(mappedBy="pokemon", fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+	@JoinTable(name="pokemon_arma", 
+	joinColumns= {@JoinColumn(name="id_pokemon")},
+	inverseJoinColumns= {@JoinColumn(name="id_arma")})
 	private List<Arma> armas; //un pokemon puede tener de 0 a N armas
 	
 	//Constructores
@@ -118,7 +121,7 @@ public class Pokemon {
 		p.setNivel(nivel);
 		p.setPeso(peso);
 		p.setImagen(imagen);
-		p.setArmas(p.getArmas());
+		p.setArmas(getArmas());
 		
 		return p;
 	}

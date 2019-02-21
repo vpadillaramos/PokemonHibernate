@@ -68,12 +68,6 @@ public class Modelo {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
 		sesion.save(pokemon);
-		
-		for(Arma arma : pokemon.getArmas()) {
-			arma.setPokemon(pokemon);
-			sesion.update(arma);
-		}
-		
 		sesion.getTransaction().commit();
 		sesion.close();
 	}
@@ -90,12 +84,6 @@ public class Modelo {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
 		sesion.update(pokemon);
-		
-		for(Arma arma : pokemon.getArmas()) {
-			arma.setPokemon(pokemon);
-			sesion.update(arma);
-		}
-		
 		sesion.getTransaction().commit();
 		sesion.close();
 	}
@@ -125,13 +113,6 @@ public class Modelo {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
 		sesion.delete(pokemon);
-		
-		//Pongo sus armas a null
-		for(Arma arma : pokemon.getArmas()) {
-			arma.setPokemon(null);
-			sesion.update(arma);
-		}
-		
 		sesion.getTransaction().commit();
 		sesion.close();
 	}
@@ -145,8 +126,6 @@ public class Modelo {
 		sesion.delete(arma);
 		sesion.getTransaction().commit();
 		sesion.close();
-		
-		System.out.println(ultimaArmaBorrada);
 	}
 	
 	public boolean deshacerPokemon() {
@@ -172,12 +151,6 @@ public class Modelo {
 	public void borrarTodoPokemon() {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
-		
-		for(Arma arma : getArmas()) {
-			arma.setPokemon(null);
-			sesion.update(arma);
-		}
-		
 		sesion.createSQLQuery("TRUNCATE TABLE pokemon").executeUpdate();
 		sesion.getTransaction().commit();
 		sesion.close();
@@ -186,13 +159,7 @@ public class Modelo {
 	public void borrarTodoArma() {
 		Session sesion = HibernateUtil.getCurrentSession();
 		sesion.beginTransaction();
-		
-		for(Pokemon pokemon : getPokemones()) {
-			pokemon.getArmas().clear();
-			sesion.update(pokemon);
-		}
-		
-		sesion.createSQLQuery("TRUNCATE TABLE armas").executeUpdate();
+		sesion.createSQLQuery("TRUNCATE TABLE armas2").executeUpdate();
 		sesion.getTransaction().commit();
 		sesion.close();
 	}
@@ -209,13 +176,6 @@ public class Modelo {
 		listArmas = (ArrayList<Arma>) query.list();
 		
 		return listArmas;
-	}
-	
-	public List<Arma> getArmasLibres(){
-		Session sesion = HibernateUtil.getCurrentSession();
-		List<Arma> armas = sesion.createQuery("FROM Arma a WHERE a.pokemon IS NULL").list();
-		sesion.close();
-		return armas;
 	}
 	
 	/***

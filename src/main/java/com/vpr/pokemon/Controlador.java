@@ -25,7 +25,7 @@ public class Controlador {
 		this.vista = vista;
 		
 		//Inicio sesion
-		iniciarSesion();
+		//iniciarSesion();
 		
 		refrescarLista();
 		vista.hacerVisible(true);
