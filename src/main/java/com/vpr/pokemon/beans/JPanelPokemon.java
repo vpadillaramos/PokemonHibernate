@@ -367,6 +367,7 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		modoEdicion(true);
 		tfNombre.requestFocus();
 		accion = Accion.NUEVO;
+		panelAnadirArma.refrescar();
 	}
 	
 	private void modificarPokemon() {
@@ -479,6 +480,13 @@ public class JPanelPokemon extends JPanel implements ActionListener, ListSelecti
 		for(Pokemon p : modelo.getPokemones()) {
 			if(!panelBusqueda.modelo.contains(p) && p.getNombre().toLowerCase().contains(cadena))
 				panelBusqueda.modelo.addElement(p);
+		}
+		
+		if(panelBusqueda.tfBuscar.getText().equals("")) {
+			//Ordeno los pokemon alfabeticamente
+			List<Pokemon> aux = modelo.getPokemones();
+			aux.sort(Comparator.comparing(Pokemon::getNombre));
+			panelBusqueda.refrescar(aux);
 		}
 	}
 
